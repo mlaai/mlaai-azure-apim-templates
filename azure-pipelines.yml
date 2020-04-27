@@ -7,13 +7,46 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Hosted Windows 2019 with VS2019
+  demands: azureps
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Host APIM Instance'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'Azure subscription 1(1421de9e-30c1-458c-8dd9-2aae6b47f3a8)'
+    subscriptionId: '1421de9e-30c1-458c-8dd9-2aae6b47f3a8'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'test-rg'
+    location: 'Central US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'service.azuredeploy.template.json'
+    csmParametersFile: './service.azuredeploy.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Create Version-Set in the APIM instance'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'Azure subscription 1(1421de9e-30c1-458c-8dd9-2aae6b47f3a8)'
+    subscriptionId: '1421de9e-30c1-458c-8dd9-2aae6b47f3a8'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'test-rg'
+    location: 'Central US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'api-httpbin.version-set.template.json'
+    csmParametersFile: './service.azuredeploy.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Create an API in the APIM instance'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'Azure subscription 1(1421de9e-30c1-458c-8dd9-2aae6b47f3a8)'
+    subscriptionId: '1421de9e-30c1-458c-8dd9-2aae6b47f3a8'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'test-rg'
+    location: 'Central US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'api-httpbin.template.json'
+    csmParametersFile: './service.azuredeploy.parameters.json'
+    deploymentMode: 'Incremental'
