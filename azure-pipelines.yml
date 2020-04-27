@@ -15,8 +15,8 @@ steps:
   displayName: 'Host APIM Instance'
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Azure subscription 1(1421de9e-30c1-458c-8dd9-2aae6b47f3a8)'
-    subscriptionId: '1421de9e-30c1-458c-8dd9-2aae6b47f3a8'
+    azureResourceManagerConnection: '<AzureSubscription>'
+    subscriptionId: '<AzureSubscriptionId>'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'test-rg'
     location: 'Central US'
@@ -28,8 +28,8 @@ steps:
   displayName: 'Create Version-Set in the APIM instance'
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Azure subscription 1(1421de9e-30c1-458c-8dd9-2aae6b47f3a8)'
-    subscriptionId: '1421de9e-30c1-458c-8dd9-2aae6b47f3a8'
+    azureResourceManagerConnection: '<AzureSubscription>'
+    subscriptionId: '<AzureSubscriptionId>'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'test-rg'
     location: 'Central US'
@@ -41,8 +41,8 @@ steps:
   displayName: 'Create an API in the APIM instance'
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Azure subscription 1(1421de9e-30c1-458c-8dd9-2aae6b47f3a8)'
-    subscriptionId: '1421de9e-30c1-458c-8dd9-2aae6b47f3a8'
+    azureResourceManagerConnection: '<AzureSubscription>'
+    subscriptionId: '<AzureSubscriptionId>'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'test-rg'
     location: 'Central US'
