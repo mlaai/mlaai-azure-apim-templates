@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ApimServiceName": {
+            "type": "string",
+            "metadata": {
+              "description" : "The name of the API Management"
+            }
+        },
+          "publisherEmail": {
+              "type": "string",
+              "minLength": 1,
+              "metadata": {
+                  "description": "The email address of the owner of the service"
+            }
+        },
+          "publisherName": {
+              "type": "string",
+              "minLength": 1,
+              "metadata": {
+                  "description": "The name of the owner of the service"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service/users",
+            "name": "[concat(parameters('ApimServiceName'), '/testfirstname-testlastname-testapim-com')]",
+            "apiVersion": "2018-01-01",
+            "scale": null,
+            "properties": {
+                "firstName": "testfirstname",
+                "lastName": "testlastname",
+                "email": "testfirstname.testlastname@testapim.com",
+                "state": "active",
+                "note": "Internal consumer of our APIs",
+                "confirmation": "invite"
+            }
+        }
+    ]
+  }

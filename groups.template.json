@@ -1,0 +1,40 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ApimServiceName": {
+            "type": "string",
+            "metadata": {
+              "description" : "The name of the API Management"
+            }
+        },
+          "publisherEmail": {
+              "type": "string",
+              "minLength": 1,
+              "metadata": {
+                  "description": "The email address of the owner of the service"
+            }
+        },
+          "publisherName": {
+              "type": "string",
+              "minLength": 1,
+              "metadata": {
+                  "description": "The name of the owner of the service"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ApiManagement/service/groups",
+            "name": "[concat(parameters('ApimServiceName'), '/testapimgroup')]",
+            "apiVersion": "2018-01-01",
+            "scale": null,
+            "properties": {
+                "displayName": "TestAPIMGroup",
+                "description": "Group containing all developers from TestAPIM who will be consuming our APIs",
+                "type": "custom",
+                "externalId": null
+            }
+        }
+    ]
+  }
