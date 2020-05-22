@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
@@ -10,43 +5,114 @@ pool:
   name: Hosted Windows 2019 with VS2019
   demands: azureps
 
+variables:
+  subscriptionName: 'Visual Studio Enterprise(xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)'
+  subscriptionId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+  resourceGroupName: 'test-rg'
+  location: 'Central US'
+
 steps:
 - task: AzureResourceManagerTemplateDeployment@3
   displayName: 'Host APIM Instance'
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: '<AzureSubscription>'
-    subscriptionId: '<AzureSubscriptionId>'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
     action: 'Create Or Update Resource Group'
-    resourceGroupName: 'test-rg'
-    location: 'Central US'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
     templateLocation: 'Linked artifact'
-    csmFile: 'service.azuredeploy.template.json'
+    csmFile: './service.azuredeploy.template.json'
     csmParametersFile: './service.azuredeploy.parameters.json'
     deploymentMode: 'Incremental'
 - task: AzureResourceManagerTemplateDeployment@3
   displayName: 'Create Version-Set in the APIM instance'
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: '<AzureSubscription>'
-    subscriptionId: '<AzureSubscriptionId>'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
     action: 'Create Or Update Resource Group'
-    resourceGroupName: 'test-rg'
-    location: 'Central US'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
     templateLocation: 'Linked artifact'
-    csmFile: 'api-httpbin.version-set.template.json'
+    csmFile: './api-httpbin/api-httpbin.version-set.template.json'
     csmParametersFile: './service.azuredeploy.parameters.json'
     deploymentMode: 'Incremental'
 - task: AzureResourceManagerTemplateDeployment@3
   displayName: 'Create an API in the APIM instance'
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: '<AzureSubscription>'
-    subscriptionId: '<AzureSubscriptionId>'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
     action: 'Create Or Update Resource Group'
-    resourceGroupName: 'test-rg'
-    location: 'Central US'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
     templateLocation: 'Linked artifact'
-    csmFile: 'api-httpbin.template.json'
+    csmFile: './api-httpbin/api-httpbin.template.json'
+    csmParametersFile: './service.azuredeploy.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Integrate APIM instance to Application Insights instance'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: './application-insights.template.json'
+    csmParametersFile: './application-insights.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Add APIM Groups'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: './groups.template.json'
+    csmParametersFile: './service.azuredeploy.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Integrate Product with Policies'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: './product.template.json'
+    csmParametersFile: './service.azuredeploy.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Include Users'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: './users.template.json'
+    csmParametersFile: './service.azuredeploy.parameters.json'
+    deploymentMode: 'Incremental'
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'Assign User to Groups'
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(subscriptionName)'
+    subscriptionId: '$(subscriptionId)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: './groupsUsers.template.json'
     csmParametersFile: './service.azuredeploy.parameters.json'
     deploymentMode: 'Incremental'

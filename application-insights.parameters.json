@@ -3,11 +3,14 @@
         "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "publisherEmail": {
-            "value": "test@test.com"
+        "ApplicationInsightsLocation": {
+            "value": "centralus"
         },
-        "publisherName": {
-            "value": "Test-Azure"
+        "ApplicationInsightsInstanceName": {
+            "value": "test-appinsights"
+        },
+        "SamplingRate": {
+            "value": 50
         },
         "ApimServiceName": {
             "value": "test1apim-dev"
